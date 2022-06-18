@@ -37,7 +37,7 @@ final class APICaller {
                 }
                 do {
                     let result =  try UserProfile.init(data: data)
-                    print(result)
+                    
                     completion(.success(result))
                 } catch {
                     print("Cannot pars data: \(error.localizedDescription)")
@@ -49,8 +49,8 @@ final class APICaller {
     }
     
     /// Get new releases
-    public func getNewReleases(completion: @escaping ((Result<String, Error>) -> Void)) {
-        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/browse/new-releases?limit=5"),
+    public func getNewReleases(completion: @escaping ((Result<NewReleaseResponse, Error>) -> Void)) {
+        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/browse/new-releases?limit=10"),
                           type: .GET,
                           completion: {request in
             let task = URLSession.shared.dataTask(with: request,
@@ -61,8 +61,9 @@ final class APICaller {
                 }
                 
                 do {
-                    let result = try JSONSerialization.jsonObject(with: data)
-                    print("Resutl: \(result)")
+                    let result = try JSONDecoder().decode(NewReleaseResponse.self, from: data)
+                    
+                    completion(.success(result))
                 } catch {
                     print("Error while fetch new releases: \(error.localizedDescription)")
                     completion(.failure(error))
@@ -70,6 +71,98 @@ final class APICaller {
             })
             task.resume()
         })
+    }
+    
+    /// Get featured playlists
+    public func getFeaturedPlaylist(completion: @escaping ((Result<FeaturedResponse, Error>) -> Void)) {
+        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/browse/featured-playlists"),
+                          type: .GET,
+                          completion: { request in
+            let task = URLSession.shared.dataTask(with: request,
+                                                  completionHandler: {data, _, error in
+                guard let data = data, error == nil else {
+                    print("Cannot fetch featured playlist")
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                do {
+                    //                    let result = try JSONDecoder().decode(FeaturedResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FeaturedResponse.self, from: data)
+                    
+                    completion(.success(result))
+                }
+                catch {
+                    print("Error while parsing data: \(error)")
+                    completion(.failure(error))
+                }
+            })
+            task.resume()
+        })
+        
+    }
+    
+    /// Get Available Genre
+    public func getAvailableGenre(completion: @escaping ((Result<GenresResponse, Error>) -> Void)) {
+        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/recommendations/available-genre-seeds/"),
+                          type: .GET,
+                          completion: { request in
+            
+            let task = URLSession.shared.dataTask(with: request,
+                                                  completionHandler: {data, response, error in
+
+                guard let data = data, error == nil else {
+                    print("Cannot fetch featured playlist")
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                do {
+//                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
+                    
+                    
+                    let result = try JSONDecoder().decode(GenresResponse.self,
+                                                          from: data)
+                    
+                    completion(.success(result))
+                }
+                catch {
+                    print("Error while parsing data: \(error)")
+                    completion(.failure(error))
+                }
+            })
+            task.resume()
+        })
+        
+    }
+    
+    /// Get recommendations
+    public func getRecommendations(genres: Set<String>,
+                                   completion: @escaping ((Result<RecommendationResponse, Error>) -> Void)) {
+        let seeds = genres.joined(separator: ",")
+        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/recommendations?seed_genres=\(seeds)&limit=2"),
+                          type: .GET,
+                          completion: { request in
+            let task = URLSession.shared.dataTask(with: request,
+                                                  completionHandler: {data, _, error in
+                
+                guard let data = data, error == nil else {
+                    print("Cannot fetch featured playlist")
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                do {
+//                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
+                    let result = try JSONDecoder().decode(RecommendationResponse.self, from: data)
+                    
+                    completion(.success(result))
+                }
+                catch {
+                    print("Error while parsing data: \(error)")
+                    completion(.failure(error))
+                }
+            })
+            task.resume()
+        })
+        
     }
     
     // MARK: - Private
