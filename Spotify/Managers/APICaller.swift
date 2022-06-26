@@ -24,6 +24,7 @@ final class APICaller {
         case failedToGetData
     }
     
+    // MARK: - User Profile
     /// Get profile to current logged in user
     public func getCurrentUserProfile(completion: @escaping (Result<UserProfile,Error>) -> Void) {
         self.createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/me"),
@@ -48,6 +49,70 @@ final class APICaller {
         })
     }
     
+    // MARK: - Albums
+    /// Get album details
+    public func getAlbumDetails(
+        for album: Album,
+        completion: @escaping (Result<AlbumDetailsResponse, Error>) -> Void) {
+            createBaseRequest(
+                with: URL(string: "\(Constants.baseAPIURL)/albums/\(album.id)"),
+                type: .GET
+            ) { request in
+                
+                let task = URLSession.shared.dataTask(with: request,
+                                                      completionHandler: {data, _, error in
+                    print("Start fetching album datails...")
+                    guard let data = data, error == nil else {
+                        completion(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    
+                    do {
+                        let result = try JSONDecoder().decode(AlbumDetailsResponse.self, from: data)
+                        completion(.success(result))
+                    } catch {
+                        print("Error while fetch album data: \(error)")
+                        completion(.failure(error))
+                    }
+                })
+                
+                task.resume()
+            }
+        }
+    
+    // MARK: - Playlists
+    
+    public func getPlaylistDetails(
+        for playlist: Playlist,
+        completion: @escaping (Result<PlaylistDetailsResponse, Error>) -> Void) {
+            createBaseRequest(
+                with: URL(string: "\(Constants.baseAPIURL)/playlists/\(playlist.id)"),
+                type: .GET
+            ) { request in
+                
+                let task = URLSession.shared.dataTask(with: request,
+                                                      completionHandler: {data, _, error in
+                    print("Start fetching album datails...")
+                    guard let data = data, error == nil else {
+                        completion(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    
+                    do {
+                        let result = try JSONDecoder().decode(PlaylistDetailsResponse.self, from: data)
+                        print(result)
+                        completion(.success(result))
+                    } catch {
+                        print("Error while fetch album data: \(error)")
+                        completion(.failure(error))
+                    }
+                })
+                
+                task.resume()
+            }
+        }
+    
+    // MARK: - Browse
     /// Get new releases
     public func getNewReleases(completion: @escaping ((Result<NewReleaseResponse, Error>) -> Void)) {
         createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/browse/new-releases?limit=10"),

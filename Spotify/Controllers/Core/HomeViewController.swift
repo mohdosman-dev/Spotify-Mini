@@ -20,7 +20,6 @@ class HomeViewController: UIViewController {
     private var albums: [Album] = []
     private var featured: [Playlist] = []
     private var recommendedTracks: [AudioTrack] = []
-
     
     private var collectionView = UICollectionView(
         frame: .zero,
@@ -195,7 +194,7 @@ class HomeViewController: UIViewController {
         sections.append(.recommendedTracks(viewModel: recommendedTracks.compactMap({
             return RecommendedTrackCellViewModel(
                 name: $0.name,
-                artworkURL: URL(string: $0.album.images.first?.url ?? ""),
+                artworkURL: URL(string: $0.album?.images.first?.url ?? ""),
                 artistName: $0.artists.first?.name ?? "-"
             )
         })))
@@ -227,6 +226,28 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let section = sections[indexPath.section]
+        switch section {
+        case .newReleases:
+            let album = self.albums[indexPath.row]
+            let vc = AlbumViewController(album: album)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            vc.title = album.name
+            navigationController?.pushViewController(vc, animated: true)
+        case .featuredPlaylist:
+            let playlist = self.featured[indexPath.row]
+            let vc = PlaylistViewController(playlist: playlist)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            vc.title = playlist.name
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case .recommendedTracks:
+            break
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
