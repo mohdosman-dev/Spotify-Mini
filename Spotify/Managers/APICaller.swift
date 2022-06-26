@@ -68,7 +68,8 @@ final class APICaller {
                     }
                     
                     do {
-                        let result = try JSONDecoder().decode(AlbumDetailsResponse.self, from: data)
+                        let result = try JSONDecoder().decode(AlbumDetailsResponse.self,
+                                                              from: data)
                         completion(.success(result))
                     } catch {
                         print("Error while fetch album data: \(error)")

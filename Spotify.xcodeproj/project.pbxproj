@@ -22,6 +22,7 @@
 		04749750285E1A270074F421 /* PlaylistDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474974F285E1A270074F421 /* PlaylistDetailsResponse.swift */; };
 		0476862E28684DED00843187 /* PlaylistHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0476862D28684DED00843187 /* PlaylistHeaderCollectionReusableView.swift */; };
 		047686302868521A00843187 /* PlaylistHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0476862F2868521A00843187 /* PlaylistHeaderViewModel.swift */; };
+		0476863228685E8600843187 /* TitleHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0476863128685E8600843187 /* TitleHeaderCollectionReusableView.swift */; };
 		04B319852858C25C00F12805 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04B319842858C25C00F12805 /* Main.storyboard */; };
 		04B319872858C2DA00F12805 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B319862858C2DA00F12805 /* TabBarViewController.swift */; };
 		04B319892858C31F00F12805 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B319882858C31F00F12805 /* SearchViewController.swift */; };
@@ -88,6 +89,7 @@
 		0474974F285E1A270074F421 /* PlaylistDetailsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailsResponse.swift; sourceTree = "<group>"; };
 		0476862D28684DED00843187 /* PlaylistHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		0476862F2868521A00843187 /* PlaylistHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderViewModel.swift; sourceTree = "<group>"; };
+		0476863128685E8600843187 /* TitleHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		04B319842858C25C00F12805 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		04B319862858C2DA00F12805 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		04B319882858C31F00F12805 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				04DFB1EB2858BF5F00BD5740 /* LaunchScreen.storyboard */,
 				04B319842858C25C00F12805 /* Main.storyboard */,
 				0476862D28684DED00843187 /* PlaylistHeaderCollectionReusableView.swift */,
+				0476863128685E8600843187 /* TitleHeaderCollectionReusableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -613,6 +616,7 @@
 				04B319A62858C46B00F12805 /* Artist.swift in Sources */,
 				0464946B2859E8A300433985 /* NewReleaseResponse.swift in Sources */,
 				045C5E47285BA74A009AF580 /* GenresResponse.swift in Sources */,
+				0476863228685E8600843187 /* TitleHeaderCollectionReusableView.swift in Sources */,
 				04B319A22858C44800F12805 /* Playlist.swift in Sources */,
 				0474973B285CF85A0074F421 /* FeaturedPlaylistCollectionViewCell.swift in Sources */,
 				0474974E285E0D3D0074F421 /* AlbumDetailsResponse.swift in Sources */,
