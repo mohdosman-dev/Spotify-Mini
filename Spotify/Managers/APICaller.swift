@@ -82,7 +82,7 @@ final class APICaller {
         }
     
     // MARK: - Playlists
-    
+    // Get playlist details
     public func getPlaylistDetails(
         for playlist: Playlist,
         completion: @escaping (Result<PlaylistDetailsResponse, Error>) -> Void) {
@@ -112,6 +112,39 @@ final class APICaller {
                 task.resume()
             }
         }
+    
+    
+    // MARK: - Categories
+    /// Get Available Categories
+    public func getAvailableCategories(completion: @escaping ((Result<CategoryResponse, Error>) -> Void)) {
+        createBaseRequest(with: URL(string: "\(Constants.baseAPIURL)/browse/categories/"),
+                          type: .GET,
+                          completion: { request in
+            
+            let task = URLSession.shared.dataTask(with: request,
+                                                  completionHandler: {data, response, error in
+
+                guard let data = data, error == nil else {
+                    print("Cannot fetch featured playlist")
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                do {
+                    let result = try JSONDecoder().decode(CategoryResponse.self,
+                                                          from: data)
+                    print("result: \(result)")
+
+                    completion(.success(result))
+                }
+                catch {
+                    print("Error while parsing data: \(error)")
+                    completion(.failure(error))
+                }
+            })
+            task.resume()
+        })
+        
+    }
     
     // MARK: - Browse
     /// Get new releases
@@ -230,6 +263,7 @@ final class APICaller {
         })
         
     }
+    
     
     // MARK: - Private
     private func createBaseRequest(
