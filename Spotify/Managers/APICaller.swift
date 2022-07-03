@@ -123,7 +123,7 @@ final class APICaller {
             
             let task = URLSession.shared.dataTask(with: request,
                                                   completionHandler: {data, response, error in
-
+                
                 guard let data = data, error == nil else {
                     print("Cannot fetch featured playlist")
                     completion(.failure(APIError.failedToGetData))
@@ -132,8 +132,7 @@ final class APICaller {
                 do {
                     let result = try JSONDecoder().decode(CategoryResponse.self,
                                                           from: data)
-                    print("result: \(result)")
-
+                    
                     completion(.success(result))
                 }
                 catch {
@@ -143,6 +142,39 @@ final class APICaller {
             })
             task.resume()
         })
+        
+    }
+    
+    /// Get Playlists for Category
+    public func getCategoryPlaylists(
+        category: Category,
+        completion: @escaping ((Result<[Playlist], Error>) -> Void)) {
+            createBaseRequest(
+            with: URL(string: "\(Constants.baseAPIURL)/browse/categories/\(category.id)/playlists"),
+            type: .GET,
+            completion: { request in
+                
+                let task = URLSession.shared.dataTask(with: request,
+                                                      completionHandler: {data, response, error in
+                    
+                    guard let data = data, error == nil else {
+                        print("Cannot fetch featured playlist")
+                        completion(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    do {
+                        let result =  try JSONDecoder().decode(FeaturedResponse.self,
+                                                                  from: data)
+                        
+                        completion(.success(result.playlists.items))
+                    }
+                    catch {
+                        print("Error while parsing data: \(error)")
+                        completion(.failure(error))
+                    }
+                })
+                task.resume()
+            })
         
     }
     
@@ -208,14 +240,14 @@ final class APICaller {
             
             let task = URLSession.shared.dataTask(with: request,
                                                   completionHandler: {data, response, error in
-
+                
                 guard let data = data, error == nil else {
                     print("Cannot fetch featured playlist")
                     completion(.failure(APIError.failedToGetData))
                     return
                 }
                 do {
-//                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
+                    //                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
                     
                     
                     let result = try JSONDecoder().decode(GenresResponse.self,
@@ -249,7 +281,7 @@ final class APICaller {
                     return
                 }
                 do {
-//                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
+                    //                    let result = try JSONDecoder().decode(GenresResponse.self, from: data)
                     let result = try JSONDecoder().decode(RecommendationResponse.self, from: data)
                     
                     completion(.success(result))

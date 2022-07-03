@@ -8,14 +8,14 @@
 import Foundation
 
 struct CategoryResponse: Codable {
-    let categories: Category
+    let categories: Categories
+}
+
+struct Categories: Codable {
+    let items: [Category]
 }
 
 struct Category: Codable {
-    let items: [CategoryItem]
-}
-
-struct CategoryItem: Codable {
     let id: String
     let name: String
     let icons: [Image]

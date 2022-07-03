@@ -18,7 +18,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         return controller
     }()
     
-    private var categories = [CategoryViewModel]()
+    private var categories = [Category]()
     
     private let collectionView: UICollectionView = UICollectionView(
         frame: .zero,
@@ -84,11 +84,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
             switch result {
             case .success(let cat):
                 DispatchQueue.main.async {
-                    self?.categories = cat.categories.items.compactMap({
-                        return CategoryViewModel(
-                            name: $0.name,
-                            artworkURL: URL(string: $0.icons.first?.url ?? ""))
-                    })
+                    self?.categories = cat.categories.items
                     self?.collectionView.reloadData()
                 }
             case .failure(let error):
@@ -116,7 +112,10 @@ extension SearchViewController:  UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath) as? GenreCollectionViewCell else {
             return UICollectionViewCell()
         }
-        let model = categories[indexPath.row]
+        let cat = categories[indexPath.row]
+       let model = CategoryViewModel(
+            name: cat.name,
+            artworkURL: URL(string: cat.icons.first?.url ?? ""))
         cell.configure(with: model)
         return cell
     }
@@ -133,8 +132,10 @@ extension SearchViewController:  UICollectionViewDelegate, UICollectionViewDataS
         collectionView.deselectItem(at: indexPath, animated: true)
         
         // TODO: - Navigate to selected category
-//        let category = categories
-//        let vc = CategoryViewController(category: <#T##Category#>)
+        let category = categories[indexPath.row]
+        let vc = CategoryViewController(category: category)
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
